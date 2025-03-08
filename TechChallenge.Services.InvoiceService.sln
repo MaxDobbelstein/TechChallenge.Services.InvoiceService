@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechChallenge.Services.InvoiceService", "TechChallenge.Services.InvoiceService\TechChallenge.Services.InvoiceService.csproj", "{BF657A60-9E4E-4474-A0C2-A344C295EE6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechChallenge.Services.InvoiceService.Tests", "TechChallenge.Services.InvoiceService.Tests\TechChallenge.Services.InvoiceService.Tests.csproj", "{8FA26CBA-00B7-4E05-A4F8-5B2DC7A5F219}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF657A60-9E4E-4474-A0C2-A344C295EE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF657A60-9E4E-4474-A0C2-A344C295EE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF657A60-9E4E-4474-A0C2-A344C295EE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF657A60-9E4E-4474-A0C2-A344C295EE6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA26CBA-00B7-4E05-A4F8-5B2DC7A5F219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA26CBA-00B7-4E05-A4F8-5B2DC7A5F219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA26CBA-00B7-4E05-A4F8-5B2DC7A5F219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA26CBA-00B7-4E05-A4F8-5B2DC7A5F219}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9628963-9ECC-459A-9E48-797B4BBE10D6}
+	EndGlobalSection
+EndGlobal

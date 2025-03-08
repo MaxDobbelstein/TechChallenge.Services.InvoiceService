@@ -1,0 +1,6 @@
+@TechChallenge.Services.InvoiceService_HostAddress = http://localhost:5172
+
+GET {{TechChallenge.Services.InvoiceService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
