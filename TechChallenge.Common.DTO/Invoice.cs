@@ -6,6 +6,5 @@ public class Invoice
     public string InvoiceNumber { get; set; }
     public DateOnly InvoiceDate { get; set; }
     public string Comment { get; set; }
-    public decimal Amount { get; set; }   
-    public byte[] Document { get; set; }
+    public decimal Amount { get; set; }       
 }
