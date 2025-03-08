@@ -1,5 +1,6 @@
-﻿
+﻿using FluentValidation;
 using Serilog;
+using TechChallenge.Services.InvoiceService.Validation;
 
 namespace TechChallenge.Services.InvoiceService.Extensions;
 
@@ -9,6 +10,7 @@ public static class WebApplicationBuilderExtension
     {
         AddSwagger(builder);
         AddLogging(builder);
+        AddValidation(builder);
         return builder;
     }
 
@@ -26,4 +28,9 @@ public static class WebApplicationBuilderExtension
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger());
     }
+
+    private static void AddValidation(WebApplicationBuilder builder)
+        => builder.Services.AddValidatorsFromAssemblyContaining<InvoiceValidator>();
+    
+
 }

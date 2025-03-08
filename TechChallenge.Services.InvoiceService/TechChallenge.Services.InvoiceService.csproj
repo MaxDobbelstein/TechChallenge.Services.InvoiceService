@@ -15,4 +15,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TechChallenge.Common.DTO\TechChallenge.Common.DTO.csproj" />
+  </ItemGroup>
+
 </Project>
