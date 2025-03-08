@@ -11,5 +11,4 @@ public class FileValidator : AbstractValidator<IFormFile>
         RuleFor(x => x.Length).NotNull().LessThanOrEqualTo(MAXFILESIZE).WithMessage("Die Dateigröße darf 5 Megabyte nicht überschreiten");
         RuleFor(x => x.ContentType).NotNull().Must(x => x.Equals(MIMETYPEPDF)).WithMessage("Es dürfen nur PDF Dateien hochgeladen werden");
     }
-
 }
