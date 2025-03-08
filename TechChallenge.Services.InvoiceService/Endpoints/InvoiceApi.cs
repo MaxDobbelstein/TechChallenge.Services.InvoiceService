@@ -19,16 +19,11 @@ public static class InvoiceApi
         app.MapPost("evaluate", Evaluate)
            .WithTags("Invoice Evaluation")
            .WithOpenApi()
-           .WithSummary("Evaluate an Invoice");
-
+           .WithSummary("Evaluate an Invoice")
+           .AddFluentValidationFilter();
     }
 
-    private static async Task<Results<Ok, ValidationProblem>> Evaluate(Invoice invoice, IValidator<Invoice> validator)
-    {
-        var validationResult = await validator.ValidateAsync(invoice);
-        if (!validationResult.IsValid)
-            return TypedResults.ValidationProblem(validationResult.ToDictionary());
-        
-        return TypedResults.Ok();
-    }
+    private static async Task<Results<Ok, ValidationProblem>> Evaluate(Invoice invoice)
+        => TypedResults.Ok();
+    
 }

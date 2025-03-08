@@ -30,7 +30,8 @@ public static class WebApplicationBuilderExtension
     }
 
     private static void AddValidation(WebApplicationBuilder builder)
-        => builder.Services.AddValidatorsFromAssemblyContaining<InvoiceValidator>();
-    
-
+    {
+        builder.AddFluentValidationEndpointFilter();
+        builder.Services.AddValidatorsFromAssemblyContaining<InvoiceValidator>();
+    }        
 }
