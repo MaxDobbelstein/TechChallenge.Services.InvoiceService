@@ -43,7 +43,8 @@ public static class InvoiceApi
     {
         gb.MapPost("upload", Upload)
           .WithOpenApi()
-          .WithSummary("Upload an Invoice document");
+          .WithSummary("Upload an Invoice document")
+          .DisableAntiforgery(); //Disabling Antiforgery for simplicity reasons
     }
 
     private static async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Upload(int invoiceId, IFormFile document, IInvoiceHandler invoiceHandler)
@@ -72,7 +73,7 @@ public static class InvoiceApi
     {
         try 
         {
-            var response = invoiceHandler.EvaluateAsync(invoiceId);
+            var response = await invoiceHandler.EvaluateAsync(invoiceId);
 
             return TypedResults.Ok(response);
         }
