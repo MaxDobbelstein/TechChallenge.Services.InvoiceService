@@ -26,7 +26,7 @@ public class InvoiceHandler : IInvoiceHandler
 
     public long CreateInvoice(Invoice invoice)
     {
-        logger.LogInformation("InvoiceNumber: {invoiceNumber} | Invoicedate: {invoiceDate} | Amount: {amount} | Creating new Invoice", invoice.InvoiceNumber, invoice.InvoiceDate, invoice.Amount)
+        logger.LogInformation("InvoiceNumber: {invoiceNumber} | Invoicedate: {invoiceDate} | Amount: {amount} | Creating new Invoice", invoice.InvoiceNumber, invoice.InvoiceDate, invoice.Amount);
         var invoiceId = invoiceRepository.Insert(invoice);
         logger.LogDebug("Invoice: {@invoice}| Invoice has been created", invoice);
         return invoiceId;
