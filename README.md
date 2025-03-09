@@ -12,8 +12,8 @@ And then run with "http" or as command line. Docker will require changes to the 
 
 # Steps
 
-Create an invoice with the /invoice/create endpoint.
-Then upload a document with the /invoice/upload endpoint
-Finally call the /invoice/evaluate endpoint to generate an evaluation. 
+1. Create an invoice with the /invoice/create endpoint.
+2. Then upload a document with the /invoice/upload endpoint.
+3. Finally call the /invoice/evaluate endpoint to generate an evaluation. 
 
 
