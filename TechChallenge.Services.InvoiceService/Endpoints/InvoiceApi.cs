@@ -25,13 +25,17 @@ public static class InvoiceApi
           .WithSummary("Create an Invoice");
     }
 
-    private static async Task<Results<Created<long>, ValidationProblem, ProblemHttpResult>> Create(Invoice invoice, IInvoiceHandler invoiceHandler)
+    private static async Task<Results<Created<long>, ValidationProblem, ProblemHttpResult, BadRequest<string>>> Create(Invoice invoice, IInvoiceHandler invoiceHandler)
     {
         try
         {
             var invoiceId = invoiceHandler.CreateInvoice(invoice);
 
             return TypedResults.Created("/invoice/upload", invoiceId);
+        }
+        catch(ArgumentException ex) 
+        {
+            return TypedResults.BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
@@ -47,7 +51,7 @@ public static class InvoiceApi
           .DisableAntiforgery(); //Disabling Antiforgery for simplicity reasons
     }
 
-    private static async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Upload(int invoiceId, IFormFile document, IInvoiceHandler invoiceHandler)
+    private static async Task<Results<Created, ValidationProblem, ProblemHttpResult, BadRequest<string>>> Upload(int invoiceId, IFormFile document, IInvoiceHandler invoiceHandler)
     {
         try
         {
@@ -55,6 +59,10 @@ public static class InvoiceApi
             await document.CopyToAsync(memoryStream);
             await invoiceHandler.SaveDocument(invoiceId, memoryStream);            
             return TypedResults.Created($"/invoice/evaluate/invoice/{invoiceId}");
+        }
+        catch (ArgumentException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
@@ -69,15 +77,19 @@ public static class InvoiceApi
           .WithSummary("Evaluate an Invoice");
     }
 
-    private static async Task<Results<Ok<EvaluationResponse>, ProblemHttpResult>> Evaluate(long invoiceId, IInvoiceHandler invoiceHandler)
+    private static async Task<Results<Ok<EvaluationResponse>, ProblemHttpResult, BadRequest<string>>> Evaluate(long invoiceId, IInvoiceHandler invoiceHandler)
     {
         try 
         {
-            var response = await invoiceHandler.EvaluateAsync(invoiceId);
+            var response = await invoiceHandler.Evaluate(invoiceId);
 
             return TypedResults.Ok(response);
         }
-        catch(Exception ex) 
+        catch (ArgumentException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+        catch (Exception ex) 
         {
             return TypedResults.Problem(ex.Message);
         }

@@ -26,14 +26,17 @@ public class InvoiceHandler : IInvoiceHandler
 
     public long CreateInvoice(Invoice invoice)
     {
+        logger.LogInformation("InvoiceNumber: {invoiceNumber} | Invoicedate: {invoiceDate} | Amount: {amount} | Creating new Invoice", invoice.InvoiceNumber, invoice.InvoiceDate, invoice.Amount)
         var invoiceId = invoiceRepository.Insert(invoice);
-
+        logger.LogDebug("Invoice: {@invoice}| Invoice has been created", invoice);
         return invoiceId;
     }
 
     public async Task SaveDocument(long invoiceId, MemoryStream memoryStream) 
     {
-        if (!invoiceRepository.Exists(invoiceId))
+        var exists = invoiceRepository.Exists(invoiceId);
+        logger.LogInformation("InvoiceId: {invoiceId} | Exists: {exists} | Saving Document for invoice", invoiceId, exists);
+        if (!exists)
             throw new ArgumentException($"InvoiceId: {invoiceId} | An invoice with this Id does not exist. Please create the invoice before uploading the document");
 
         var filePath = $"{options.BasePath}/{invoiceId}";
@@ -49,15 +52,25 @@ public class InvoiceHandler : IInvoiceHandler
             await memoryStream.DisposeAsync();
         }
 
+        logger.LogDebug("InvoiceId: {invoiceId} | Exists: {exists} | File Fullname: {fullName} | Document saved", invoiceId, exists, fullName);
     }
 
-    public async Task<EvaluationResponse> EvaluateAsync(long invoiceId)
+    public async Task<EvaluationResponse> Evaluate(long invoiceId)
     {
         var invoice = invoiceRepository.Find(invoiceId);
+        logger.LogInformation("InvoiceId: {invoiceId} | Exists: {exists} | Evaluating invoice", invoiceId, invoice != null);
         if (invoice == null)
             throw new ArgumentException($"InvoiceId: {invoiceId} | An invoice with this Id does not exist. Please create the invoice before evaluating");
+        var fullName = $"{options.BasePath}/{invoiceId}/invoice.pdf";
+        if(!File.Exists(fullName))
+            throw new ArgumentException($"InvoiceId: {invoiceId} | Has no document attached. Please upload the document for the invoice before evaluating");
+
         var riskLevel = await riskLevelServiceClient.GetRiskLevelAsync(invoice);
+        if (riskLevel == null)
+            throw new Exception($"InvoiceId: {invoiceId} | Error getting Risklevel. Please check configuratoin or risklevel api");
+
         EvaluationResponse evaluationResponse = CreateEvaluationResponse(invoiceId, riskLevel);
+        logger.LogDebug("InvoiceId: {invoiceId} | Exists: {exists} | Evalution: {@evalution} | Evaluating invoice", invoiceId, invoice != null, evaluationResponse);
         return evaluationResponse;
     }
 
