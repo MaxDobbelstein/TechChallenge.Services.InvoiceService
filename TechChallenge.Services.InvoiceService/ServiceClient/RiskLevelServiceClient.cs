@@ -16,7 +16,7 @@ public class RiskLevelServiceClient : IRiskLevelServiceClient
     }
 
     public async Task<RiskLevelResponse> GetRiskLevelAsync(Invoice invoice)
-    {
+    { 
         var restRequest = new RestRequest("/risklevel");
         restRequest.AddJsonBody(invoice);
         var response = await restClient.PostAsync<RiskLevelResponse>(restRequest);

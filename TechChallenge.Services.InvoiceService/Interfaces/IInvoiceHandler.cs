@@ -4,6 +4,6 @@ namespace TechChallenge.Services.InvoiceService.Interfaces;
 public interface IInvoiceHandler
 {
     long CreateInvoice(Invoice invoice);
-    EvaluationResponse Evaluate(long invoiceId);
-    void SaveDocument(long invoiceId, MemoryStream memoryStream);
+    EvaluationResponse EvaluateAsync(long invoiceId);
+    Task SaveDocument(long invoiceId, MemoryStream memoryStream);
 }

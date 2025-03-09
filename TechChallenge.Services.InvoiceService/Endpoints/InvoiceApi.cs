@@ -52,8 +52,8 @@ public static class InvoiceApi
         {
             var memoryStream = new MemoryStream();
             await document.CopyToAsync(memoryStream);
-            invoiceHandler.SaveDocument(invoiceId, memoryStream);            
-            return TypedResults.Created($"/invoice/evaluate/invoiceid/{invoiceId}");
+            await invoiceHandler.SaveDocument(invoiceId, memoryStream);            
+            return TypedResults.Created($"/invoice/evaluate/invoice/{invoiceId}");
         }
         catch (Exception ex)
         {
@@ -63,7 +63,7 @@ public static class InvoiceApi
 
     private static void AddEvaluateEndpoint(RouteGroupBuilder gb)
     {
-        gb.MapPut("evaluate/invoiceid/{invoiceId}", Evaluate)
+        gb.MapPut("evaluate/invoice/{invoiceId}", Evaluate)
           .WithOpenApi()
           .WithSummary("Evaluate an Invoice");
     }
@@ -72,7 +72,7 @@ public static class InvoiceApi
     {
         try 
         {
-            var response = invoiceHandler.Evaluate(invoiceId);
+            var response = invoiceHandler.EvaluateAsync(invoiceId);
 
             return TypedResults.Ok(response);
         }
