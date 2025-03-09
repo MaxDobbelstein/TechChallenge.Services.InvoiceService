@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Polly;
 using Serilog;
-using System.ComponentModel;
 using TechChallenge.Common.DTO.Contexts;
+using TechChallenge.Common.Repositories;
+using TechChallenge.Common.Repositories.Interfaces;
 using TechChallenge.Services.InvoiceService.Handler;
 using TechChallenge.Services.InvoiceService.Helper;
 using TechChallenge.Services.InvoiceService.Interfaces;
@@ -24,7 +25,7 @@ public static class WebApplicationBuilderExtension
         AddServiceClients(builder);
         AddConfiguration(builder);
         AddHandler(builder);
-        AddRepositories(builder);
+        AddRepositories(builder);        
         return builder;
     }
 
@@ -63,8 +64,6 @@ public static class WebApplicationBuilderExtension
         builder.Services
                .AddHttpClient<IRiskLevelServiceClient, RiskLevelServiceClient>(opt => { opt.BaseAddress = new Uri(riskLevelServiceOptions.BaseUrl); })
                .AddTransientHttpErrorPolicy(retryBuilder => retryBuilder.WaitAndRetryAsync(configuredRetries));
-
-
     }
 
     private static void AddConfiguration(WebApplicationBuilder builder)
@@ -80,6 +79,6 @@ public static class WebApplicationBuilderExtension
     private static void AddRepositories(WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<InvoiceContext>(options => options.UseSqlite(builder.Configuration["ConnectionStrings:InvoiceConnection"]), ServiceLifetime.Scoped);
+        builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
     }
-
 }

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Data;
-using System.Runtime.CompilerServices;
 using TechChallenge.Common.DTO;
 using TechChallenge.Common.DTO.Enums;
 using TechChallenge.Common.Repositories.Interfaces;

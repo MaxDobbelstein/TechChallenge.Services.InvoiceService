@@ -42,7 +42,7 @@ public static class InvoiceApi
     private static void AddUploadEndpoint(RouteGroupBuilder gb)
     {
         gb.MapPost("upload", Upload)
-          .WithOpenApi()
+          //.WithOpenApi()
           .WithSummary("Upload an Invoice document")
           .DisableAntiforgery(); //Disabling Antiforgery for simplicity reasons
     }
