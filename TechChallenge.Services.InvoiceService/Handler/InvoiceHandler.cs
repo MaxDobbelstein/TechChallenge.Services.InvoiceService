@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using TechChallenge.Common.DTO;
+﻿using TechChallenge.Common.DTO;
 using TechChallenge.Common.DTO.Enums;
 using TechChallenge.Common.Repositories.Interfaces;
 using TechChallenge.Services.InvoiceService.Interfaces;
@@ -9,17 +8,17 @@ namespace TechChallenge.Services.InvoiceService.Handler;
 public class InvoiceHandler : IInvoiceHandler
 {
     private readonly ILogger<InvoiceHandler> logger;
-    private readonly Options.FileOptions options;
+    private readonly IFileHandler fileHandler;
     private readonly IRiskLevelServiceClient riskLevelServiceClient;
     private readonly IInvoiceRepository invoiceRepository;
 
     public InvoiceHandler(ILogger<InvoiceHandler> logger,
-                          IOptions<Options.FileOptions> options,
+                          IFileHandler fileHandler,
                           IRiskLevelServiceClient riskLevelServiceClient,
                           IInvoiceRepository invoiceRepository)
     {
         this.logger = logger;
-        this.options = options.Value ?? throw new ArgumentNullException("FileOptions are missing");
+        this.fileHandler = fileHandler;
         this.riskLevelServiceClient = riskLevelServiceClient;
         this.invoiceRepository = invoiceRepository;
     }
@@ -39,20 +38,9 @@ public class InvoiceHandler : IInvoiceHandler
         if (!exists)
             throw new ArgumentException($"InvoiceId: {invoiceId} | An invoice with this Id does not exist. Please create the invoice before uploading the document");
 
-        var filePath = $"{options.BasePath}/{invoiceId}";
-        if (!Directory.Exists(filePath))
-            Directory.CreateDirectory(filePath);
+        await fileHandler.SaveFile(invoiceId, memoryStream);
 
-        var fullName = $"{filePath}/invoice.pdf";
-        using(FileStream fileStream = new FileStream(fullName, FileMode.Create))
-        {
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            memoryStream.CopyTo(fileStream);
-            await fileStream.FlushAsync();
-            await memoryStream.DisposeAsync();
-        }
-
-        logger.LogDebug("InvoiceId: {invoiceId} | Exists: {exists} | File Fullname: {fullName} | Document saved", invoiceId, exists, fullName);
+        logger.LogDebug("InvoiceId: {invoiceId} | Exists: {exists} | Document saved", invoiceId, exists);
     }
 
     public async Task<EvaluationResponse> Evaluate(long invoiceId)
@@ -61,8 +49,8 @@ public class InvoiceHandler : IInvoiceHandler
         logger.LogInformation("InvoiceId: {invoiceId} | Exists: {exists} | Evaluating invoice", invoiceId, invoice != null);
         if (invoice == null)
             throw new ArgumentException($"InvoiceId: {invoiceId} | An invoice with this Id does not exist. Please create the invoice before evaluating");
-        var fullName = $"{options.BasePath}/{invoiceId}/invoice.pdf";
-        if(!File.Exists(fullName))
+        
+        if(!fileHandler.Exists(invoiceId))
             throw new ArgumentException($"InvoiceId: {invoiceId} | Has no document attached. Please upload the document for the invoice before evaluating");
 
         var riskLevel = await riskLevelServiceClient.GetRiskLevelAsync(invoice);
