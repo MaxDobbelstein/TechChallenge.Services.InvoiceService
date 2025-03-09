@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using TechChallenge.Common.DTO;
 using TechChallenge.Services.InvoiceService.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TechChallenge.Services.InvoiceService.Endpoints;
 

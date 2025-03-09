@@ -1,7 +1,13 @@
-﻿namespace TechChallenge.Common.DTO;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TechChallenge.Common.DTO;
 //Anmerkung: Seperates Projekt, damit es später evtl als NuGet Paket bereitgestellt werden kann.
+//Anmerkung: Normalerweise separier ich DTO und Entity und mappe dann mit Automapper oder Mapperli um (DTOs sind bei mir abgeflachtere 
 public class Invoice
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
     public string InvoiceNumber { get; set; }
     public DateOnly InvoiceDate { get; set; }
