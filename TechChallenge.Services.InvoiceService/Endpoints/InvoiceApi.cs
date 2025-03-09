@@ -28,8 +28,19 @@ public static class InvoiceApi
           .WithSummary("Create an Invoice");
     }
 
-    private static async Task<Results<Ok, ValidationProblem>> Create(Invoice invoice, IInvoiceHandler invoiceHandler)
-        => TypedResults.Ok();
+    private static async Task<Results<Created<long>, ValidationProblem, ProblemHttpResult>> Create(Invoice invoice, IInvoiceHandler invoiceHandler)
+    {
+        try
+        {
+            var invoiceId = invoiceHandler.CreateInvoice(invoice);
+
+            return TypedResults.Created("/invoice/upload", invoiceId);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.Problem(ex.Message);
+        }
+    }
 
     private static void AddUploadEndpoint(RouteGroupBuilder gb)
     {
@@ -38,11 +49,19 @@ public static class InvoiceApi
           .WithSummary("Upload an Invoice document");
     }
 
-    private static async Task<Results<Ok, ValidationProblem>> Upload(int invoiceId, IFormFile document, IInvoiceHandler invoiceHandler)
-    { 
-
-        //var file = document.CopyToAsync()
-        return TypedResults.Ok();
+    private static async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Upload(int invoiceId, IFormFile document, IInvoiceHandler invoiceHandler)
+    {
+        try
+        {
+            var memoryStream = new MemoryStream();
+            await document.CopyToAsync(memoryStream);
+            invoiceHandler.SaveDocument(invoiceId, memoryStream);            
+            return TypedResults.Created($"/invoice/evaluate/invoiceid/{invoiceId}");
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.Problem(ex.Message);
+        }
     }
 
     private static void AddEvaluateEndpoint(RouteGroupBuilder gb)
@@ -52,8 +71,17 @@ public static class InvoiceApi
           .WithSummary("Evaluate an Invoice");
     }
 
-    private static async Task Evaluate(long invoiceId, IInvoiceHandler invoiceHandler)
+    private static async Task<Results<Ok<EvaluationResponse>, ProblemHttpResult>> Evaluate(long invoiceId, IInvoiceHandler invoiceHandler)
     {
-        throw new NotImplementedException();
+        try 
+        {
+            var response = invoiceHandler.Evaluate(invoiceId);
+
+            return TypedResults.Ok(response);
+        }
+        catch(Exception ex) 
+        {
+            return TypedResults.Problem(ex.Message);
+        }
     }
 }

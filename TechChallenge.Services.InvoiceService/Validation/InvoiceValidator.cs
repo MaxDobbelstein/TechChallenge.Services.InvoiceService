@@ -10,8 +10,7 @@ public class InvoiceValidator : AbstractValidator<Invoice>
     public InvoiceValidator()
     {
         RuleFor(x => x.InvoiceDate).LessThan(DateOnly.FromDateTime(DateTime.Now)).NotNull();
-        RuleFor(x => x.Amount).GreaterThan(0);
-        RuleFor(x => x.Id).GreaterThan(0);
+        RuleFor(x => x.Amount).GreaterThan(0);        
         //Anmerkung -> die Strings sollten Konstanten sein. 
         RuleFor(x => x.InvoiceNumber)
                .MinimumLength(6).WithMessage("Die Mindestlänge für {PropertyName} beträgt 6")
