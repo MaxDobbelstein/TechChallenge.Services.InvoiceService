@@ -33,7 +33,7 @@ public class InvoiceHandler : IInvoiceHandler
         return invoiceId;
     }
 
-    public async Task SaveDocumentAsync(long invoiceId, MemoryStream memoryStream) 
+    public async Task SaveDocument(long invoiceId, MemoryStream memoryStream) 
     {
         if (!invoiceRepository.Exists(invoiceId))
             throw new ArgumentException($"InvoiceId: {invoiceId} | An invoice with this Id does not exist. Please create the invoice before uploading the document");
