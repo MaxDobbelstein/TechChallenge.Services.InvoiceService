@@ -1,6 +1,5 @@
 ﻿using RestSharp;
 using TechChallenge.Common.DTO;
-using TechChallenge.Common.DTO.RiskLevelApi;
 using TechChallenge.Services.InvoiceService.Interfaces;
 
 namespace TechChallenge.Services.InvoiceService.ServiceClient;

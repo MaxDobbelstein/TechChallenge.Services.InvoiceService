@@ -1,4 +1,4 @@
-﻿namespace TechChallenge.Common.DTO.RiskLevelApi;
+﻿namespace TechChallenge.Common.DTO.Enums;
 
 public enum Classification
 {

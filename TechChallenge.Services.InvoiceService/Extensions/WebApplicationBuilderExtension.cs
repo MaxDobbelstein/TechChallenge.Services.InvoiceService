@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 using Polly;
 using Serilog;
+using System.ComponentModel;
+using TechChallenge.Services.InvoiceService.Handler;
 using TechChallenge.Services.InvoiceService.Helper;
 using TechChallenge.Services.InvoiceService.Interfaces;
 using TechChallenge.Services.InvoiceService.Options;
 using TechChallenge.Services.InvoiceService.ServiceClient;
 using TechChallenge.Services.InvoiceService.Validation;
+using FileOptions = TechChallenge.Services.InvoiceService.Options.FileOptions;
 
 namespace TechChallenge.Services.InvoiceService.Extensions;
 
@@ -17,6 +20,8 @@ public static class WebApplicationBuilderExtension
         AddLogging(builder);
         AddValidation(builder);
         AddServiceClients(builder);
+        AddConfiguration(builder);
+        AddHandler(builder);
         return builder;
     }
 
@@ -57,5 +62,15 @@ public static class WebApplicationBuilderExtension
                .AddTransientHttpErrorPolicy(retryBuilder => retryBuilder.WaitAndRetryAsync(configuredRetries));
 
 
+    }
+
+    private static void AddConfiguration(WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<FileOptions>(builder.Configuration.GetSection(FileOptions.CONFIGURATIONSECTION));
+    }
+
+    private static void AddHandler(WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IInvoiceHandler, InvoiceHandler>();
     }
 }

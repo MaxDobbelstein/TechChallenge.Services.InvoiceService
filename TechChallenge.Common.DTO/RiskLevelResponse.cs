@@ -1,4 +1,6 @@
-﻿namespace TechChallenge.Common.DTO.RiskLevelApi;
+﻿using TechChallenge.Common.DTO.Enums;
+
+namespace TechChallenge.Common.DTO;
 
 public class RiskLevelResponse
 {
